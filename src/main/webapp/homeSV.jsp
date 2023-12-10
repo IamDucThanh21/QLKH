@@ -47,8 +47,9 @@
         <% if (myCourses != null && myCourses.size() > 0) { %>
         <% for (Course course : myCourses) {
             String courseLink = course.getCourse_id() + ". " + course.getCourse_name();
+            System.out.println(courseLink);
         %>
-            <a href="courseController?courseID=<%course.getCourse_id();%>"><%=courseLink%><a>
+            <a href="courseController?courseId=<%= course.getCourse_id() %>"><%=courseLink%><a>
         <% } %>
         <% } else { %>
         <p>Không có khoa hoc nao de hien thi.</p>

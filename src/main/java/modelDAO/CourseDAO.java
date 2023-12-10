@@ -39,7 +39,7 @@ public class CourseDAO {
     public List<Course> getCoursesByTeacherId(int IDGV) throws SQLException {
         List<Course> courses = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM course WHERE giangvien_id = ?");
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM course WHERE giangvien_id = ?")
         ) {
             statement.setInt(1, IDGV);
 

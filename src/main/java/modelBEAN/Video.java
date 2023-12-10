@@ -6,6 +6,9 @@ public class Video {
     private  String course_id;
     private String  file_path;
 
+    public  Video(){
+
+    }
     public Video(int IDVD, String video_title, String course_id, String file_path){
         this.IDVD = IDVD;
         this.video_title = video_title;

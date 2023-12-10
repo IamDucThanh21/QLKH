@@ -28,13 +28,17 @@
                     <tr>
                         <th>ID khóa học</th>
                         <th>Tên khóa học</th>
+                        <th>Danh sách sinh viên</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <% for (Course course : courses) { %>
                         <tr>
                             <td><%= course.getCourse_id() %></td>
-                            <td><%= course.getCourse_name() %></td>
+                            <td><a href="courseController?courseId=<%= course.getCourse_id() %>"><%= course.getCourse_name() %></a></td>
+                            <td><a href="sinhvienController?courseId=<%= course.getCourse_id() %>">Xem danh sách</td>
+
                         </tr>
                     <% } %>
                 </tbody>

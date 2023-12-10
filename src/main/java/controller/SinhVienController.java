@@ -1,11 +1,10 @@
 package controller;
 
 import modelBEAN.Course;
-import modelBEAN.GiangVien;
 import modelBEAN.SinhVien;
 import modelDAO.CourseDAO;
-import modelDAO.GiangVienDAO;
 import modelDAO.SinhVienDAO;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,13 +38,15 @@ public class SinhVienController extends HttpServlet {
         action = request.getParameter("courseID");
         System.out.println(action);
     }
-    public List<Course> getMycourse(){
+    public List<Course> getMycourse() {
         SinhVienDAO sinhVienDAO;
+
         try {
             sinhVienDAO = new SinhVienDAO();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
 
         CourseDAO courseDAO = null;
         try {
@@ -57,38 +58,44 @@ public class SinhVienController extends HttpServlet {
         SinhVien sinhVien = new SinhVien();
         try {
             IDSV = sinhVienDAO.getIDSVByEmail(this.email);
-            System.out.println("IDGV: "+ IDSV);
-            sinhVien = sinhVienDAO.getSinhVienByID(IDSV);
-            System.out.println("IDGV: "+ sinhVien.getIDSV() + " Ten sinh vien: " + sinhVien.getName() + " Email: " + sinhVien.getEmail() );
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            System.out.println("IDGV: " + IDSV);
+            sinhVien = sinhVienDAO.getSVByIDSV(IDSV);
+            System.out.println("IDGV: " + sinhVien.getIDSV() + " Ten sinh vien: " + sinhVien.getName() + " Email: " + sinhVien.getEmail());
 
-        List<Integer> coursesID = null;
-        try {
-            coursesID = sinhVienDAO.getCoursesByStudentId(IDSV);
 
-            System.out.println("Lay danh sach course thanh cong");
+            List<Integer> coursesID = null;
+            try {
+                coursesID = sinhVienDAO.getCoursesByStudentId(IDSV);
 
-            for (int course : coursesID) {
-                System.out.println("ID khóa học: " + course);
+                System.out.println("Lay danh sach course thanh cong");
+
+                for (int course : coursesID) {
+                    System.out.println("ID khóa học: " + course);
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        List<Course> myCourses = new ArrayList<>();
-        try {
-            List<Course> courses = courseDAO.getAllCourses();
-            for(int courseId : coursesID){
-                myCourses.add(courses.get(courseId - 1));
+            List<Course> myCourses = new ArrayList<>();
+            try {
+                List<Course> courses = courseDAO.getAllCourses();
+                for (int courseId : coursesID) {
+                    myCourses.add(courses.get(courseId - 1));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
+            return myCourses;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return  myCourses;
-    }
-    public void responseCourse(){
-
+//    public void responseCourse(){
+//=======
+//        // Hiển thị danh sách các video
+//        request.setAttribute("sinhviens", sinhViens);
+//        request.getServletContext().getRequestDispatcher("/viewSV.jsp").forward(request, response);
+//>>>>>>> upstream/add_future_SV
+//
+//    }
     }
 }

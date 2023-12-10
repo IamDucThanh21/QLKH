@@ -1,8 +1,10 @@
 package controller;
 
 import modelBEAN.Course;
+import modelBEAN.Video;
 import modelDAO.CourseDAO;
 import modelDAO.GiangVienDAO;
+import modelDAO.VideoDAO;
 import util.DBUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -23,44 +25,24 @@ public class CourseController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy thông tin giảng viên từ session (đã đăng nhập)
-        HttpSession session = request.getSession();
+        String courseId = request.getParameter("courseId");
 
-        String email = (String) session.getAttribute("email");
-        System.out.println("email: "+ email);
-
-        GiangVienDAO giangVienDAO;
+        // Lấy danh sách các video cho khóa học
+        VideoDAO videoDAO = null;
         try {
-            giangVienDAO = new GiangVienDAO();
+            videoDAO = new VideoDAO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<Video> videos = null;
+        try {
+            videos = videoDAO.getAllVideoByCourseID(Integer.parseInt(courseId));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        CourseDAO courseDAO = null;
-        try {
-            courseDAO = new CourseDAO();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        int IDGV = 0;
-        try {
-            IDGV = giangVienDAO.getIDGVByEmail(email);
-            System.out.println("IDGV: "+ IDGV);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<Course> courses = null;
-        try {
-//            courses = courseDAO.getCoursesByTeacherId(IDGV);
-            courses = giangVienDAO.getCoursesByTeacherId(IDGV);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        // Đặt danh sách bài giảng vào request để truy cập trong JSP
-        request.setAttribute("courses", courses);
-
-        // Forward đến trang JSP
-        response.sendRedirect("courseController");
+        // Hiển thị danh sách các video
+        request.setAttribute("videos", videos);
+        request.getServletContext().getRequestDispatcher("/viewcourse.jsp").forward(request, response);
     }
 }
