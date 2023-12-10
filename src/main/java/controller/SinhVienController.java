@@ -22,13 +22,24 @@ import java.util.List;
 @WebServlet("/sinhVienController")
 
 public class SinhVienController extends HttpServlet {
+    private String email;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy thông tin sinh viên từ session (đã đăng nhập)
         HttpSession session = request.getSession();
+        this.email = (String) session.getAttribute("email");
+        String action = "";
 
-        String email = (String) session.getAttribute("email");
-        System.out.println("email: "+ email);
 
+            List<Course> myCourses = getMycourse();
+            request.setAttribute("myCourses", myCourses);
+            System.out.println("Dữ liệu đã được đặt vào request: " + myCourses);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("homeSV.jsp");
+            dispatcher.forward(request, response);
+
+        action = request.getParameter("courseID");
+        System.out.println(action);
+    }
+    public List<Course> getMycourse(){
         SinhVienDAO sinhVienDAO;
         try {
             sinhVienDAO = new SinhVienDAO();
@@ -42,11 +53,10 @@ public class SinhVienController extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(email);
         int IDSV = 0;
         SinhVien sinhVien = new SinhVien();
         try {
-            IDSV = sinhVienDAO.getIDSVByEmail(email);
+            IDSV = sinhVienDAO.getIDSVByEmail(this.email);
             System.out.println("IDGV: "+ IDSV);
             sinhVien = sinhVienDAO.getSinhVienByID(IDSV);
             System.out.println("IDGV: "+ sinhVien.getIDSV() + " Ten sinh vien: " + sinhVien.getName() + " Email: " + sinhVien.getEmail() );
@@ -76,10 +86,9 @@ public class SinhVienController extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return  myCourses;
+    }
+    public void responseCourse(){
 
-        request.setAttribute("myCourses", myCourses);
-        System.out.println("Dữ liệu đã được đặt vào request: " + myCourses);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("homeSV.jsp");
-        dispatcher.forward(request, response);
     }
 }

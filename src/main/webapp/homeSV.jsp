@@ -48,7 +48,7 @@
         <% for (Course course : myCourses) {
             String courseLink = course.getCourse_id() + ". " + course.getCourse_name();
         %>
-            <a><%=courseLink%><a>
+            <a href="courseController?courseID=<%course.getCourse_id();%>"><%=courseLink%><a>
         <% } %>
         <% } else { %>
         <p>Không có khoa hoc nao de hien thi.</p>

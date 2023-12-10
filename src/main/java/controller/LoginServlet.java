@@ -16,8 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 @WebServlet("/loginServlet")
 public class LoginServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
@@ -25,10 +24,10 @@ public class LoginServlet extends HttpServlet {
         // Thực hiện xác thực người dùng (có thể sử dụng Service hoặc DAO)
         // Nếu xác thực thành công, chuyển hướng đến homepage tương ứng
         if (authenticateUser(email, password, role)) {
-            System.out.println("vô vô");
             HttpSession session = request.getSession();
             session.setAttribute("email", email);
             session.setAttribute("role", role);
+            System.out.println("Đăng nhập thành công");
             String redirectURL = getRedirectURL(role);
             response.sendRedirect(redirectURL);
         } else {
@@ -105,11 +104,10 @@ public class LoginServlet extends HttpServlet {
     private String getRedirectURL(String role) {
         if (!Objects.equals(role, "admin")) {
             if (Objects.equals(role, "giangvien")){
-                System.out.println("Tới đây");
                 return "giangvienController";
             }
             else {
-                System.out.println("okkkk");
+
                 return  "sinhVienController";
             }
         } else {

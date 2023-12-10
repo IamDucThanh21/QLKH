@@ -62,7 +62,5 @@ public class CourseController extends HttpServlet {
 
         // Forward đến trang JSP
         response.sendRedirect("courseController");
-
     }
-
 }
