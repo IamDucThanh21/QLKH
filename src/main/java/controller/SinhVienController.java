@@ -81,6 +81,5 @@ public class SinhVienController extends HttpServlet {
         System.out.println("Dữ liệu đã được đặt vào request: " + myCourses);
         RequestDispatcher dispatcher = request.getRequestDispatcher("homeSV.jsp");
         dispatcher.forward(request, response);
-
     }
 }
