@@ -25,8 +25,30 @@ public class CourseController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy thông tin giảng viên từ session (đã đăng nhập)
-        String courseId = request.getParameter("courseId");
+        int courseId = Integer.parseInt(request.getParameter("courseId"));
+        HttpSession session = request.getSession();
 
+
+        List<Video> videos = getVideoByIDCourse(courseId);
+        if(session.getAttribute("role").equals("giangvien")){
+            // Hiển thị danh sách các video
+            request.setAttribute("videos", videos);
+            request.getServletContext().getRequestDispatcher("/viewcourse.jsp").forward(request, response);
+        } else if (session.getAttribute("role").equals("sinhvien")) {
+            CourseDAO courseDAO = null;
+            try {
+                courseDAO = new CourseDAO();
+                Course course = courseDAO.getCoursesById(courseId);
+                request.setAttribute("nameCourse", course.getCourse_name());
+                request.setAttribute("videos", videos);
+                request.getServletContext().getRequestDispatcher("/detailCourse.jsp").forward(request, response);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+    public List<Video> getVideoByIDCourse(int courseID){
         // Lấy danh sách các video cho khóa học
         VideoDAO videoDAO = null;
         try {
@@ -36,13 +58,10 @@ public class CourseController extends HttpServlet {
         }
         List<Video> videos = null;
         try {
-            videos = videoDAO.getAllVideoByCourseID(Integer.parseInt(courseId));
+            videos = videoDAO.getAllVideoByCourseID(courseID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        // Hiển thị danh sách các video
-        request.setAttribute("videos", videos);
-        request.getServletContext().getRequestDispatcher("/viewcourse.jsp").forward(request, response);
+        return  videos;
     }
 }

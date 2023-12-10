@@ -89,13 +89,5 @@ public class SinhVienController extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-//    public void responseCourse(){
-//=======
-//        // Hiển thị danh sách các video
-//        request.setAttribute("sinhviens", sinhViens);
-//        request.getServletContext().getRequestDispatcher("/viewSV.jsp").forward(request, response);
-//>>>>>>> upstream/add_future_SV
-//
-//    }
     }
 }

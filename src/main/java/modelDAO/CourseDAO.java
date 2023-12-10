@@ -36,6 +36,7 @@ public class CourseDAO {
         }
         return courses;
     }
+
     public List<Course> getCoursesByTeacherId(int IDGV) throws SQLException {
         List<Course> courses = new ArrayList<>();
 
@@ -56,26 +57,22 @@ public class CourseDAO {
         }
         return courses;
     }
-//    public List<Course> getCoursesById(int IdCourse) throws SQLException {
-//        List<Course> courses = new ArrayList<>();
-//
-//        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM course WHERE IdCourse = ?");
-//        ) {
-//            statement.setInt(1, IDGV);
-//
-//            try (ResultSet resultSet = statement.executeQuery()) {
-//                while (resultSet.next()) {
-//                    Course course = new Course();
-//                    course.setCourse_id(resultSet.getInt("course_id"));
-//                    course.setCourse_name(resultSet.getString("course_name"));
-//                    // Các trường khác tương tự
-//
-//                    courses.add(course);
-//                }
-//            }
-//        }
-//        return courses;
-//    }
+    public Course getCoursesById(int IdCourse) throws SQLException {
+        Course course = new Course();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM course WHERE course_id = ?");
+        ) {
+            statement.setInt(1, IdCourse);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    course.setCourse_id(resultSet.getInt("course_id"));
+                    course.setCourse_name(resultSet.getString("course_name"));
+                    // Các trường khác tương tự
+                }
+            }
+        }
+        return course;
+    }
     public void addCourse(Course course) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO course (course_name, giangvien_id) VALUES (?, ?)")) {
             statement.setString(1, course.getCourse_name());
