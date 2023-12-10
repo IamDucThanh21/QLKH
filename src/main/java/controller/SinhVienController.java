@@ -9,13 +9,17 @@ import modelDAO.SinhVienDAO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+@WebServlet("/sinhVienController")
 
 public class SinhVienController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,7 +42,7 @@ public class SinhVienController extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        System.out.println(email);
         int IDSV = 0;
         SinhVien sinhVien = new SinhVien();
         try {
@@ -63,8 +67,18 @@ public class SinhVienController extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        request.setAttribute("courses", coursesID);
-        System.out.println("Dữ liệu đã được đặt vào request: " + coursesID);
+        List<Course> myCourses = new ArrayList<>();
+        try {
+            List<Course> courses = courseDAO.getAllCourses();
+            for(int courseId : coursesID){
+                myCourses.add(courses.get(courseId - 1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        request.setAttribute("myCourses", myCourses);
+        System.out.println("Dữ liệu đã được đặt vào request: " + myCourses);
         RequestDispatcher dispatcher = request.getRequestDispatcher("homeSV.jsp");
         dispatcher.forward(request, response);
 

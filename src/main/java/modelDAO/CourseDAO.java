@@ -31,7 +31,6 @@ public class CourseDAO {
                 course.setCourse_id(resultSet.getInt("course_id"));
                 course.setCourse_name(resultSet.getString("course_name"));
                 // Các trường khác tương tự
-
                 courses.add(course);
             }
         }
@@ -55,10 +54,28 @@ public class CourseDAO {
                 }
             }
         }
-
         return courses;
     }
-
+//    public List<Course> getCoursesById(int IdCourse) throws SQLException {
+//        List<Course> courses = new ArrayList<>();
+//
+//        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM course WHERE IdCourse = ?");
+//        ) {
+//            statement.setInt(1, IDGV);
+//
+//            try (ResultSet resultSet = statement.executeQuery()) {
+//                while (resultSet.next()) {
+//                    Course course = new Course();
+//                    course.setCourse_id(resultSet.getInt("course_id"));
+//                    course.setCourse_name(resultSet.getString("course_name"));
+//                    // Các trường khác tương tự
+//
+//                    courses.add(course);
+//                }
+//            }
+//        }
+//        return courses;
+//    }
     public void addCourse(Course course) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO course (course_name, giangvien_id) VALUES (?, ?)")) {
             statement.setString(1, course.getCourse_name());

@@ -1,3 +1,5 @@
+<%@ page import="java.util.List" %>
+<%@ page import="modelBEAN.Course" %>
 <!-- student.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -37,10 +39,20 @@
 </head>
 <body>
     <h1>Các khoá học của tôi</h1>
+    <%
+        // Lấy danh sách các khóa học từ request
+        List<Course> myCourses = (List<Course>) request.getAttribute("myCourses");
+    %>
     <div class="menu">
-        <c:forEach var="courseID" items="${coursesID}">
-            <p>ID khóa học: ${courseID}</p>
-        </c:forEach>
+        <% if (myCourses != null && myCourses.size() > 0) { %>
+        <% for (Course course : myCourses) {
+            String courseLink = course.getCourse_id() + ". " + course.getCourse_name();
+        %>
+            <a><%=courseLink%><a>
+        <% } %>
+        <% } else { %>
+        <p>Không có khoa hoc nao de hien thi.</p>
+        <% } %>
     </div>
 </body>
 </html>

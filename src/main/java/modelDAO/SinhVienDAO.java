@@ -19,7 +19,7 @@ public class SinhVienDAO {
     }
 
     public int getIDSVByEmail(String email) throws SQLException {
-
+        System.out.println(email);
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM sinhvien WHERE email = ?"))
         {
             statement.setString(1, email);
@@ -28,7 +28,7 @@ public class SinhVienDAO {
                 if (resultSet.next()) {
                     return resultSet.getInt("sinhvien_id");
                 } else {
-                    // Giảng viên không tồn tại
+                    // Sinh viên không tồn tại
                     return -1;
                 }
             }
@@ -48,14 +48,14 @@ public class SinhVienDAO {
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()) {
                     sinhVien = new SinhVien();
-                    sinhVien.setIDSV(resultSet.getInt("giangvien_id"));
+                    sinhVien.setIDSV(resultSet.getInt("sinhvien_id"));
                     sinhVien.setName(resultSet.getString("ho_ten"));
                     sinhVien.setEmail(resultSet.getString("email"));
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy IDGV: " + e.getMessage());
+            System.err.println("Lỗi khi lấy IDSV: " + e.getMessage());
             throw e;
         }
         return sinhVien;
@@ -73,7 +73,7 @@ public class SinhVienDAO {
                     // Các trường khác tương tự
                 }
             }catch (SQLException e){
-                System.out.println("IDGV: " + IDSV);
+                System.out.println("IDSV: " + IDSV);
                 System.err.println("Lỗi khi lấy course: " + e.getMessage());
             }
 
