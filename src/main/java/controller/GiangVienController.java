@@ -74,6 +74,59 @@ public class GiangVienController  extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("homeGV.jsp");
         dispatcher.forward(request, response);
 
+//        request.getServletContext().getRequestDispatcher("/homeGV.jsp").forward(request, response);
 
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+
+        String email = (String) session.getAttribute("email");
+        int IDGV = 0;
+        GiangVien giangVien = new GiangVien();
+        GiangVienDAO giangVienDAO = null;
+        try {
+            giangVienDAO = new GiangVienDAO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            IDGV = giangVienDAO.getIDGVByEmail(email);
+            System.out.println("IDGV: " + IDGV);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        // Lấy thông tin khóa học từ form
+        String courseName = request.getParameter("courseName");
+        System.out.println("courseName: " + courseName);
+
+        // ... Lấy thông tin khác nếu cần thiết
+
+        // Gọi phương thức thêm khóa học
+        CourseDAO courseDAO;
+        try {
+            courseDAO = new CourseDAO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Course course = new Course();
+        course.setIDGV(IDGV);
+        course.setCourse_name(courseName);
+        try {
+            courseDAO.addCourse(course);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<Course> courses = null;
+        try {
+            courses = giangVienDAO.getCoursesByTeacherId(IDGV);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        request.setAttribute("courses", courses);
+        // Chuyển hướng hoặc forward đến trang homeGV.jsp
+        RequestDispatcher dispatcher = request.getRequestDispatcher("homeGV.jsp");
+        dispatcher.forward(request, response);
     }
 }

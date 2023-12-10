@@ -60,7 +60,7 @@ public class CourseDAO {
     }
 
     public void addCourse(Course course) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO course (course_name, teacher_id) VALUES (?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO course (course_name, giangvien_id) VALUES (?, ?)")) {
             statement.setString(1, course.getCourse_name());
             statement.setInt(2, course.getIDGV());
 
