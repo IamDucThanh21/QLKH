@@ -53,6 +53,7 @@ public class SinhVienDAO {
                     sinhvien.setIDSV(resultSet.getInt("sinhvien_id"));
                     sinhvien.setName(resultSet.getString("ho_ten"));
                     sinhvien.setEmail(resultSet.getString("email"));
+                    System.out.println(sinhvien.getName());
                 }
             }
 

@@ -1,4 +1,7 @@
-<%--
+<%@ page import="modelBEAN.Course" %>
+<%@ page import="java.util.List" %>
+<%@ page import="modelBEAN.Video" %>
+<%@ page import="modelBEAN.SinhVien" %><%--
   Created by IntelliJ IDEA.
   User: PC
   Date: 12/10/2023
@@ -8,12 +11,64 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Chi tiết khoá học</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #000;
+            padding: 10px 0;
+            font-size: larger;
+            align-self: center;
+        }
+
+        .menu a:hover {
+            color: #ff0000;
+        }
+
+        .menu p {
+            font-size: larger;
+            align-self: center;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <%String nameCourse = request.getAttribute("nameCourse").toString();%>
-    <h1>Chi tiết khoá học <%=nameCourse%></h1>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/3UDefkrGQ_w?si=0BBzoJ4u_F7Sr-yN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/e3agRuWPCng?si=sVzzkZ3lFg28k_V0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <%Course course = (Course) request.getAttribute("course");
+    List<Video> videos = (List<Video>) request.getAttribute("videos");%>
+    <h1>Khoá học <%=course.getCourse_name()%></h1>
+    <div class="menu">
+        <% if (videos != null && videos.size() > 0) {
+            int i = 1;
+            for (Video video : videos) {
+        %>
+            <a href="">Bài <%=i++%>. <%=video.getVideo_title()%><a>
+        <% }
+        }
+        else { %>
+            <p>Không có video nao de hien thi.</p>
+        <% } %>
+    </div>
+    <h2>Danh sách sinh viên</h2>
+    <br>
+    <%
+        List<SinhVien> sinhViens = (List<SinhVien>) request.getAttribute("sinhViens");
+        for(SinhVien sinhVien : sinhViens){
+            %>
+                <p><%=sinhVien.getName()%></p>
+                <br>
+            <%
+        }
+    %>
+
 </body>
 </html>

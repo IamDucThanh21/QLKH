@@ -1,9 +1,13 @@
 package controller;
 
 import modelBEAN.Course;
+import modelBEAN.SinhVien;
 import modelBEAN.Video;
+import modelBO.SinhVienBO;
+import modelBO.Sinhvien_course_BO;
 import modelDAO.CourseDAO;
 import modelDAO.GiangVienDAO;
+import modelDAO.SinhVienDAO;
 import modelDAO.VideoDAO;
 import util.DBUtil;
 
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/courseController")
@@ -27,19 +32,28 @@ public class CourseController extends HttpServlet {
         // Lấy thông tin giảng viên từ session (đã đăng nhập)
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         HttpSession session = request.getSession();
-
-
         List<Video> videos = getVideoByIDCourse(courseId);
         if(session.getAttribute("role").equals("giangvien")){
-            // Hiển thị danh sách các video
             request.setAttribute("videos", videos);
             request.getServletContext().getRequestDispatcher("/viewcourse.jsp").forward(request, response);
         } else if (session.getAttribute("role").equals("sinhvien")) {
             CourseDAO courseDAO = null;
             try {
+                // Lấy khoá học theo id
                 courseDAO = new CourseDAO();
                 Course course = courseDAO.getCoursesById(courseId);
-                request.setAttribute("nameCourse", course.getCourse_name());
+
+                Sinhvien_course_BO sinhvienCourseBo = new Sinhvien_course_BO();
+                SinhVienBO sinhVienBO = new SinhVienBO();
+                List<Integer> studentIDs = sinhvienCourseBo.getListSVbyCourseID(courseId);
+                List<SinhVien> sinhViens = new ArrayList<>();
+                for(int id : studentIDs){
+                    System.out.println(id);
+                    sinhViens.add(sinhVienBO.getSinhVienById(id));
+                }
+
+                request.setAttribute("sinhViens", sinhViens);
+                request.setAttribute("course", course);
                 request.setAttribute("videos", videos);
                 request.getServletContext().getRequestDispatcher("/detailCourse.jsp").forward(request, response);
             } catch (SQLException e) {
